@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="name">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Add Title</ion-title>
+    <ion-button
+      slot="end"
+      class="btnLogin"
+      style="padding-right: 10px"
+      routerLink="/login"
+      *ngIf="!name"
+    >
+      <ion-icon name="person-outline" style="padding-right: 5px"></ion-icon>
+      Login
+    </ion-button>
+    <ion-item *ngIf="name" slot="end" lines="none" class="username">
+      <ion-label style="font-size: xx-small" *ngIf="name">{{name}}</ion-label>
+      <ion-button
+        fill="outline"
+        style="height: 25px"
+        (click)="logout()"
+        *ngIf="name"
+      >
+        <ion-icon name="exit"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked">Title</ion-label>
+    <ion-input
+      [(ngModel)]="title"
+      fill="outline"
+      placeholder="Enter title"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">CG Title</ion-label>
+    <ion-input
+      [(ngModel)]="cgTitle"
+      fill="outline"
+      placeholder="Enter CG title"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Service Title</ion-label>
+    <ion-input
+      [(ngModel)]="serviceTitle"
+      fill="outline"
+      placeholder="Enter service title"
+    ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-button (click)="addTitle()">
+      <ion-label>Add title</ion-label>
+    </ion-button>
+  </ion-item>
+
+  <ion-item>
+    <ion-button disabled="true" (click)="convertTitles()">
+      <ion-label>One time button - convert titles</ion-label>
+    </ion-button>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col> Title </ion-col>
+      <ion-col> CG Title </ion-col>
+      <ion-col> Service Title </ion-col>
+      <ion-col size="1"></ion-col>
+    </ion-row>
+    <ion-row *ngFor="let title of arrTitle">
+      <ion-col> {{title.title}} </ion-col>
+      <ion-col> {{title.cgTitle}} </ion-col>
+      <ion-col> {{title.serviceTitle}} </ion-col>
+      <ion-col size="1" (click)="editTitle(title)">
+        <ion-icon name="pencil"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

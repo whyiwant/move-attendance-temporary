@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Submit Time </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="arrTitle.length">
+  <ion-item class="select-CG">
+    <ion-select
+      placeholder="Select title"
+      [(ngModel)]="selectTitle"
+      (ionChange)="titleSelected()"
+      interface="popover"
+    >
+      <ion-select-option *ngFor="let title of arrTitle" [value]="title.title"
+        >{{title.title}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item *ngIf="selectTitle">
+    <table>
+      <thead>
+        <tr>
+          <th>CG</th>
+          <th>Submit Time</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let att of sortedAtt">
+          <td>{{ att.CG }}</td>
+          <td>{{ att.timeStamp }}</td>
+          <td *ngIf="att.source">New</td>
+          <td *ngIf="! att.source">Old</td>
+        </tr>
+      </tbody>
+    </table>
+  </ion-item>
+</ion-content>

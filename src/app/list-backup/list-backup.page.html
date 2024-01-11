@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>list-backup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <table>
+      <thead>
+        <tr>
+          <th>CG</th>
+          <th>Submit Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let att of arrAtt">
+          <td> {{ att.att.CG }}</td>
+          <td> {{ att.att.timeStamp }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ion-item>
+</ion-content>

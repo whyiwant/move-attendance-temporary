@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <!-- <ion-title>Please confirm to sbumit the following attendance</ion-title> -->
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [disabled]="!isCGAbsWritten">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-note color="danger" class="warning" *ngIf="!isCGAbsWritten">Please write absent reason for CG</ion-note>
+  <ion-item>
+    <ion-text>Please confirm to submit the following attendance, or cancel to edit.</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-card>
+      <!-- <ion-card-title></ion-card-title> -->
+      <ion-card-content>
+        <ion-text class="att-title">{{att.CG}}@{{att.title}}</ion-text><br><br>
+        <b>Friday CG</b><br>
+        {{ "Total - " + att.attCG.Total }}<br>
+        {{ "OM - " + att.attCG.OM }}<br>
+        {{ "NB - " + att.attCG.NB + (att.attCG.NB == 0 ? "" : att.attCG.desNB) }}<br>
+        {{ "NF - " + att.attCG.NF + (att.attCG.NF == 0 ? "" : att.attCG.desNF) }}<br>
+        {{ "RNF - " + att.attCG.RNF + (att.attCG.RNF == 0 ? "" : att.attCG.desRNF) }}<br>
+        {{ "AC - " + att.attCG.AC + (att.attCG.AC == 0 ? "" : att.attCG.desAC) }}<br>
+        {{ "Abs - " + att.attCG.Abs + (att.attCG.desAbs == "()" ? "" : att.attCG.desAbs) }}
+        <br><br>
+        <span *ngIf="att.attNorCG">
+          <b>Normal CG</b><br>
+          {{ "Total - " + att.attNorCG.Total }}<br>
+          {{ "OM - " + att.attNorCG.OM }}<br>
+          {{ "NB - " + att.attNorCG.NB + (att.attNorCG.NB == 0 ? "" : att.attNorCG.desNB) }}<br>
+          {{ "NF - " + att.attNorCG.NF + (att.attNorCG.NF == 0 ? "" : att.attNorCG.desNF) }}<br>
+          {{ "RNF - " + att.attNorCG.RNF + (att.attNorCG.RNF == 0 ? "" : att.attNorCG.desRNF) }}<br>
+          {{ "Abs - " + att.attNorCG.Abs + (att.attNorCG.desAbs == "()" ? "" : att.attNorCG.desAbs) }}
+          <br><br>
+        </span>
+        <span *ngIf="att.attDis">
+          <b>Discipleship/Follow Up</b><br>
+          {{ "Total - " + att.attDis.Total }}<br>
+          {{ "OM - " + att.attDis.OM }}<br>
+          {{ "NB - " + att.attDis.NB + (att.attDis.NB == 0 ? "" : att.attDis.desNB) }}<br>
+          {{ "NF - " + att.attDis.NF + (att.attDis.NF == 0 ? "" : att.attDis.desNF) }}<br>
+          {{ "RNF - " + att.attDis.RNF + (att.attDis.RNF == 0 ? "" : att.attDis.desRNF) }}<br>
+          {{ "Abs - " + att.attDis.Abs + (att.attDis.desAbs == "()" ? "" : att.attDis.desAbs) }}
+          <br><br>
+        </span>
+        <span *ngIf="att.attDev">
+          <b>Prayer Meeting/Devotion</b><br>
+          {{ "Total - " + att.attDev.Total }}<br>
+          {{ "OM - " + att.attDev.OM }}<br>
+          {{ "NB - " + att.attDev.NB + (att.attDev.NB == 0 ? "" : att.attDev.desNB) }}<br>
+          {{ "Abs - " + att.attDev.Abs + (att.attDev.desAbs == "()" ? "" : att.attDev.desAbs) }}
+          <br><br>
+        </span>
+        <span *ngIf="att.attOut">
+          <b>Outreach/Evangelism</b><br>
+          {{ "Total - " + att.attOut.Total }}<br>
+          {{ "OM - " + att.attOut.OM }}<br>
+          {{ "NB - " + att.attOut.NB + (att.attOut.NB == 0 ? "" : att.attOut.desNB) }}<br>
+          {{ "NF - " + att.attOut.NF + (att.attOut.NF == 0 ? "" : att.attOut.desNF) }}<br>
+          {{ "RNF - " + att.attOut.RNF + (att.attOut.RNF == 0 ? "" : att.attOut.desRNF) }}<br>
+          {{ "AC - " + att.attOut.AC + (att.attOut.AC == 0 ? "" : att.attOut.desAC) }}<br>
+          {{ "Abs - " + att.attOut.Abs + (att.attOut.desAbs == "()" ? "" : att.attOut.desAbs) }}
+          <br><br>
+        </span>
+        <b>Service</b><br>
+        {{ "Total - " + att.attService.Total }}<br>
+        {{ "OM - " + att.attService.OM }}<br>
+        {{ "NB - " + att.attService.NB + (att.attService.NB == 0 ? "" : att.attService.desNB) }}<br>
+        {{ "NF - " + att.attService.NF + (att.attService.NF == 0 ? "" : att.attService.desNF) }}<br>
+        {{ "RNF - " + att.attService.RNF + (att.attService.RNF == 0 ? "" : att.attService.desRNF) }}<br>
+        {{ "AC - " + att.attService.AC + (att.attService.AC == 0 ? "" : att.attService.desAC) }}<br>
+        {{ "Abs - " + att.attService.Abs + (att.attService.desAbs == "()" ? "" : att.attService.desAbs) }}
+        <br><br>
+        <!-- <b>Weekly Total Attendance</b><br>
+        {{ "Total - " + att.attW.Total }}<br>
+        {{ "OM - " + att.attW.OM }}<br>
+        {{ "NB - " + att.attW.NB + (att.attW.NB == 0 ? "" : att.attW.desNB) }}<br>
+        {{ "NF - " + att.attW.NF + (att.attW.NF == 0 ? "" : att.attW.desNF) }}<br>
+        {{ "RNF - " + att.attW.RNF + (att.attW.RNF == 0 ? "" : att.attW.desRNF) }}<br>
+        {{ "AC - " + att.attW.AC + (att.attW.AC == 0 ? "" : att.attW.desAC) }}<br>
+        {{ "Abs - " + att.attW.Abs + (att.attW.desAbs == "()" ? "" : att.attW.desAbs) }} -->
+      </ion-card-content>
+    </ion-card>
+  </ion-item>
+</ion-content>

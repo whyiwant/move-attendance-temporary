@@ -1,0 +1,213 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="name">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-no-padding" *ngIf="name">Check Attendance</ion-title>
+    <ion-title *ngIf="!name">Check Attendance</ion-title>
+    <ion-button
+      slot="end"
+      class="btnLogin"
+      style="padding-right: 10px"
+      routerLink="/login"
+      *ngIf="!name"
+    >
+      <ion-icon name="person-outline" style="padding-right: 5px"></ion-icon>
+      Login
+    </ion-button>
+    <ion-item *ngIf="name" slot="end" lines="none" class="username">
+      <ion-label style="font-size: xx-small" *ngIf="name">{{name}}</ion-label>
+      <ion-button
+        fill="outline"
+        style="height: 25px"
+        (click)="logout()"
+        *ngIf="name"
+      >
+        <ion-icon name="exit"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="arrTitle.length">
+  <ion-item class="select-CG">
+    <ion-select
+      placeholder="Select title"
+      [(ngModel)]="selectTitle"
+      (ionChange)="titleSelected()"
+      interface="popover"
+    >
+      <ion-select-option *ngFor="let title of arrTitle" [value]="title"
+        >{{title.title}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col *ngFor="let att of arrAtt" size="6" class="ion-no-padding">
+        <!-- <ion-item class="ion-no-padding"> -->
+        <ion-card>
+          <!-- <ion-card-title></ion-card-title> -->
+          <ion-card-content>
+            <ion-text>{{att.CG}}@{{att.title}}</ion-text><br /><br />
+            <!-- <b>In Time - Friday session</b><br> -->
+            <b>{{ selectTitle.cgTitle }}</b><br />
+            {{ "Total - " + att.attCG.Total }}<br />
+            {{ "OM - " + att.attCG.OM }}<br />
+            {{ "NB - " + att.attCG.NB + (att.attCG.NB == 0 ? "" :
+            att.attCG.desNB) }}<br />
+            {{ "AC - " + att.attCG.AC + (att.attCG.AC == 0 ? "" :
+            att.attCG.desAC) }}<br />
+            {{ "NF - " + att.attCG.NF + (att.attCG.NF == 0 ? "" :
+            att.attCG.desNF) }}<br />
+            {{ "RNF - " + att.attCG.RNF + (att.attCG.RNF == 0 ? "" :
+            att.attCG.desRNF) }}<br />
+            {{ "Abs - " + att.attCG.Abs + (att.attCG.desAbs == "()" ? "" :
+            att.attCG.desAbs) }}
+            <br /><br />
+            <!-- <b>Discipleship/Follow Up</b><br>
+            {{ "Total - " + att.attDis.Total }}<br>
+            {{ "OM - " + att.attDis.OM }}<br>
+            {{ "NB - " + att.attDis.NB + (att.attDis.NB == 0 ? "" : att.attDis.desNB) }}<br>
+            {{ "NF - " + att.attDis.NF + (att.attDis.NF == 0 ? "" : att.attDis.desNF) }}<br>
+            {{ "RNF - " + att.attDis.RNF + (att.attDis.RNF == 0 ? "" : att.attDis.desRNF) }}<br>
+            {{ "Abs - " + att.attDis.Abs + (att.attDis.desAbs == "()" ? "" : att.attDis.desAbs) }}
+            <br><br> -->
+            <b>Prayer Meeting/Devotion</b><br />
+            {{ "Total - " + att.attDev.Total }}<br />
+            {{ "OM - " + att.attDev.OM }}<br />
+            {{ "NB - " + att.attDev.NB + (att.attDev.NB == 0 ? "" :
+            att.attDev.desNB) }}<br />
+            {{ "Abs - " + att.attDev.Abs + (att.attDev.desAbs == "()" ? "" :
+            att.attDev.desAbs) }}
+            <br /><br />
+            <!-- <b>Outreach/Evangelism</b><br>
+            {{ "Total - " + att.attOut.Total }}<br>
+            {{ "OM - " + att.attOut.OM }}<br>
+            {{ "NB - " + att.attOut.NB + (att.attOut.NB == 0 ? "" : att.attOut.desNB) }}<br>
+            {{ "NF - " + att.attOut.NF + (att.attOut.NF == 0 ? "" : att.attOut.desNF) }}<br>
+            {{ "RNF - " + att.attOut.RNF + (att.attOut.RNF == 0 ? "" : att.attOut.desRNF) }}<br>
+            {{ "AC - " + att.attOut.AC + (att.attOut.AC == 0 ? "" : att.attOut.desAC) }}<br>
+            {{ "Abs - " + att.attOut.Abs + (att.attOut.desAbs == "()" ? "" : att.attOut.desAbs) }}
+            <br><br> -->
+            <!-- <b>CG/Sky Activities</b><br>
+            {{ "Total - " + att.attCG.Total }}<br>
+            {{ "OM - " + att.attCG.OM }}<br>
+            {{ "NB - " + att.attCG.NB + (att.attCG.NB == 0 ? "" : att.attCG.desNB) }}<br>
+            {{ "NF - " + att.attCG.NF + (att.attCG.NF == 0 ? "" : att.attCG.desNF) }}<br>
+            {{ "RNF - " + att.attCG.RNF + (att.attCG.RNF == 0 ? "" : att.attCG.desRNF) }}<br>
+            {{ "AC - " + att.attCG.AC + (att.attCG.AC == 0 ? "" : att.attCG.desAC) }}<br>
+            {{ "Abs - " + att.attCG.Abs + (att.attCG.desAbs == "()" ? "" : att.attCG.desAbs) }}
+            <br><br> -->
+            <b>{{ selectTitle.serviceTitle }}</b><br />
+            <!-- <b>In Time - Saturday & Sunday session</b><br> -->
+            {{ "Total - " + att.attService.Total }}<br />
+            {{ "OM - " + att.attService.OM }}<br />
+            {{ "NB - " + att.attService.NB + (att.attService.NB == 0 ? "" :
+            att.attService.desNB) }}<br />
+            {{ "NF - " + att.attService.NF + (att.attService.NF == 0 ? "" :
+            att.attService.desNF) }}<br />
+            {{ "RNF - " + att.attService.RNF + (att.attService.RNF == 0 ? "" :
+            att.attService.desRNF) }}<br />
+            {{ "AC - " + att.attService.AC + (att.attService.AC == 0 ? "" :
+            att.attService.desAC) }}<br />
+            {{ "Abs - " + att.attService.Abs + (att.attService.desAbs == "()" ?
+            "" : att.attService.desAbs) }}
+            <br /><br />
+            <!-- <b>Weekly Total Attendance</b><br>
+            {{ "Total - " + att.attW.Total }}<br>
+            {{ "OM - " + att.attW.OM }}<br>
+            {{ "NB - " + att.attW.NB + (att.attW.NB == 0 ? "" : att.attW.desNB) }}<br>
+            {{ "NF - " + att.attW.NF + (att.attW.NF == 0 ? "" : att.attW.desNF) }}<br>
+            {{ "RNF - " + att.attW.RNF + (att.attW.RNF == 0 ? "" : att.attW.desRNF) }}<br>
+            {{ "AC - " + att.attW.AC + (att.attW.AC == 0 ? "" : att.attW.desAC) }}<br>
+            {{ "Abs - " + att.attW.Abs + (att.attW.desAbs == "()" ? "" : att.attW.desAbs) }} -->
+          </ion-card-content>
+        </ion-card>
+        <!-- </ion-item> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item *ngIf="selectTitle" style="overflow: auto">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">Pastoral Team</th>
+          <th colspan="9">CG</th>
+          <th colspan="9">YW Service</th>
+        </tr>
+        <tr>
+          <th>Total</th>
+          <th>OM</th>
+          <th>Sky OM</th>
+          <th>NB</th>
+          <th>AC</th>
+          <th>NF</th>
+          <th>RNF</th>
+          <th>Sky NB/NF</th>
+          <th>Abs</th>
+          <th>Total</th>
+          <th>OM</th>
+          <th>Sky OM</th>
+          <th>NB</th>
+          <th>AC</th>
+          <th>NF</th>
+          <th>RNF</th>
+          <th>Sky NB/NF</th>
+          <th>Abs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let att of arrAtt">
+          <td>{{ att.attCG.CG }}</td>
+          <td>{{ att.attCG.Total }}</td>
+          <td>{{ att.attCG.gOM }}</td>
+          <td>{{ att.attCG.sOM }}</td>
+          <td>{{ att.attCG.gNB }}</td>
+          <td>{{ att.attCG.AC }}</td>
+          <td>{{ att.attCG.gNF }}</td>
+          <td>{{ att.attCG.gRNF }}</td>
+          <td>{{ att.attCG.sNB + att.attCG.sNF + att.attCG.sRNF }}</td>
+          <td>{{ att.attCG.Abs }}</td>
+          <td>{{ att.attService.Total }}</td>
+          <td>{{ att.attService.gOM }}</td>
+          <td>{{ att.attService.sOM }}</td>
+          <td>{{ att.attService.gNB }}</td>
+          <td>{{ att.attService.AC }}</td>
+          <td>{{ att.attService.gNF }}</td>
+          <td>{{ att.attService.gRNF }}</td>
+          <td>
+            {{ att.attService.sNB + att.attService.sNF + att.attService.sRNF }}
+          </td>
+          <td>{{ att.attService.Abs }}</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>{{ attCG.sky.total + attCG.ground.total }}</td>
+          <td>{{ attCG.ground.cntOM }}</td>
+          <td>{{ attCG.sky.cntOM }}</td>
+          <td>{{ attCG.ground.cntNB }}</td>
+          <td>{{ attCG.ground.cntAC + attCG.sky.cntAC }}</td>
+          <td>{{ attCG.ground.cntNF }}</td>
+          <td>{{ attCG.ground.cntRNF }}</td>
+          <td>{{ attCG.sky.cntNB + attCG.sky.cntNF + attCG.sky.cntRNF }}</td>
+          <td>{{ attCG.cntAbs }}</td>
+          <td>{{ attService.sky.total + attService.ground.total }}</td>
+          <td>{{ attService.ground.cntOM }}</td>
+          <td>{{ attService.sky.cntOM }}</td>
+          <td>{{ attService.ground.cntNB }}</td>
+          <td>{{ attService.ground.cntAC + attService.sky.cntAC }}</td>
+          <td>{{ attService.ground.cntNF }}</td>
+          <td>{{ attService.ground.cntRNF }}</td>
+          <td>
+            {{ attService.sky.cntNB + attService.sky.cntNF +
+            attService.sky.cntRNF }}
+          </td>
+          <td>{{ attService.cntAbs }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ion-item>
+</ion-content>

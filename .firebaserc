@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "test-5e504",
+    "functions": "online-payment-5e504"
+  },
+  "targets": {
+    "test-5e504": {
+      "hosting": {
+        "moveatt22": [
+          "moveatt22"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

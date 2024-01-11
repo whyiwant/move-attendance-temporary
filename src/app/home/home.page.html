@@ -1,0 +1,867 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="name">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-no-padding" *ngIf="name">Submit Attendance</ion-title>
+    <ion-title *ngIf="!name">Submit Attendance</ion-title>
+    <ion-button
+      slot="end"
+      class="btnLogin"
+      style="padding-right: 10px"
+      routerLink="/login"
+      *ngIf="!name"
+    >
+      <ion-icon name="person-outline" style="padding-right: 5px"></ion-icon>
+      Login
+    </ion-button>
+    <ion-item *ngIf="name" slot="end" lines="none" class="username">
+      <ion-label style="font-size: xx-small" *ngIf="name">{{name}}</ion-label>
+      <ion-button
+        fill="outline"
+        style="height: 25px"
+        (click)="logout()"
+        *ngIf="name"
+      >
+        <ion-icon name="exit"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item class="select-CG">
+    <ionic-selectable
+      [(ngModel)]="selectCG"
+      [items]="filteredCG"
+      itemTextField="CG"
+      itemValueField="CG"
+      groupValueField="smallTeam"
+      groupTextField="smallTeam"
+      (onChange)="change($event)"
+      placeholder="Select CG"
+    >
+      <ng-template ionicSelectableGroupTemplate let-group="group">
+        {{group.text}}
+      </ng-template>
+    </ionic-selectable>
+  </ion-item>
+
+  <ion-item *ngIf="selectCG" class="select-CG">
+    <ion-select
+      placeholder="Select title"
+      [(ngModel)]="selectTitle"
+      interface="popover"
+    >
+      <ion-select-option *ngFor="let title of arrTitle" [value]="title.title"
+        >{{title.title}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item *ngIf="selectCG">
+    <ion-grid>
+      <!-- Friday CG -->
+      <ion-row>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-text *ngIf="selectTitle" class="att-title"
+              >{{arrTitleForTitles[selectTitle].cgTitle}}</ion-text
+            >
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let num of arrNum" class="ion-align-items-center">
+        <ion-col size="auto">
+          <ion-text>{{num.Name}}</ion-text>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-select
+              class="select-attendance"
+              [(ngModel)]="num.attCG.attendance"
+              interface="popover"
+            >
+              <ion-select-option value="1">Attended </ion-select-option>
+              <ion-select-option value="0">Absent </ion-select-option>
+            </ion-select>
+            <ion-select
+              *ngIf="num.attCG.attendance=='1'"
+              class="select-attendance"
+              [(ngModel)]="num.attCG.method"
+              interface="popover"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+            <ion-item *ngIf="num.attCG.attendance=='0'">
+              <ion-label position="floating">Absent reason</ion-label>
+              <ion-input
+                class="service-abs-reason"
+                [(ngModel)]="num.attCG.reason"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NB - </ion-text>
+            <ion-input
+              [(ngModel)]="attCG.cntNB"
+              (ionChange)="cntChange('CG','NB')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <ion-item
+            *ngFor="let name of attCG.namesNB | namesPipe:attCG.cntNB; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attCG.namesNB[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attCG.methodNB[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NF - </ion-text>
+            <ion-input
+              [(ngModel)]="attCG.cntNF"
+              (ionChange)="cntChange('CG','NF')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <!-- <ion-input *ngFor="let name of attCG.namesNF | namesPipe:attCG.cntNF; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attCG.namesNF[i]" placeholder="Name" class="names" autocomplete="nope"></ion-input> -->
+          <ion-item
+            *ngFor="let name of attCG.namesNF | namesPipe:attCG.cntNF; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attCG.namesNF[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attCG.methodNF[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>RNF/BS - </ion-text>
+            <ion-input
+              [(ngModel)]="attCG.cntRNF"
+              (ionChange)="cntChange('CG','RNF')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <!-- <ion-input *ngFor="let name of attCG.namesRNF | namesPipe:attCG.cntRNF; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attCG.namesRNF[i]" placeholder="Name" class="names" autocomplete="nope"></ion-input> -->
+          <ion-item
+            *ngFor="let name of attCG.namesRNF | namesPipe:attCG.cntRNF; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attCG.namesRNF[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attCG.methodRNF[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>AC - </ion-text>
+            <ion-input
+              [(ngModel)]="attCG.cntAC"
+              (ionChange)="cntChange('CG','AC')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <!-- <ion-input *ngFor="let name of attCG.namesAC | namesPipe:attCG.cntAC; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attCG.namesAC[i]" placeholder="Name" class="names" autocomplete="nope"></ion-input> -->
+          <ion-item
+            *ngFor="let name of attCG.namesAC | namesPipe:attCG.cntAC; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attCG.namesAC[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attCG.methodAC[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <!-- Discipleship/Follow Up -->
+      <!-- <ion-row>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-text class="att-title">Discipleship/Follow Up</ion-text>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let num of arrNum">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="auto">
+              <ion-text>{{num.Name}}</ion-text>
+            </ion-col>
+            <ion-col>
+              <ion-item lines="none" class="ion-no-padding">
+                <ion-select class="select-attendance" [(ngModel)]="num.attDis.attendance" interface="popover">
+                  <ion-select-option value="1">Attended
+                  </ion-select-option>
+                  <ion-select-option value="0">Absent
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row> -->
+
+      <!-- OM's name already written -->
+      <!-- <ion-col>
+                  <ion-input [(ngModel)]="arrFlwUp.OM[num.id].name" placeholder="Name" class="ion-text-wrap" text-wrap>
+                  </ion-input>
+                </ion-col> -->
+      <!-- <ion-item *ngIf="num.attDis.attendance=='1'">
+            <ion-grid>
+              <ion-row>
+                <ion-col> -->
+      <!-- <ion-label position="floating">Follow up by</ion-label> -->
+      <!-- <ion-item>
+                    <ion-label position="floating">Follow up by</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.OM[num.id].by"></ion-input>
+                  </ion-item>
+
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Follow up status</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.OM[num.id].status">
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-grid>
+      </ion-row>
+
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NB - </ion-text>
+            <ion-input [(ngModel)]="attDis.cntNB" (ionChange)="cntChange('Dis','NB')" type="number"></ion-input>
+          </ion-item>
+          <ion-item *ngFor="let name of attDis.namesNB | namesPipe:attDis.cntNB; let i = index;trackBy:trackByIdx">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Name</ion-label>
+                    <ion-input [(ngModel)]="attDis.namesNB[i]" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Follow up by</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.NB[i].by" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Follow up status</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.NB[i].status" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NF - </ion-text>
+            <ion-input [(ngModel)]="attDis.cntNF" (ionChange)="cntChange('Dis','NF')" type="number"></ion-input>
+          </ion-item> -->
+      <!-- <ion-input *ngFor="let name of attDis.namesNF | namesPipe:attDis.cntNF; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attDis.namesNF[i]" placeholder="Name"></ion-input> -->
+      <!-- <ion-item *ngFor="let name of attDis.namesNF | namesPipe:attDis.cntNF; let i = index;trackBy:trackByIdx">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Name</ion-label>
+                    <ion-input [(ngModel)]="attDis.namesNF[i]" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Follow up by</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.NF[i].by" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Follow up status</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.NF[i].status" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>RNF/BS - </ion-text>
+            <ion-input [(ngModel)]="attDis.cntRNF" (ionChange)="cntChange('Dis','RNF')" type="number"></ion-input>
+          </ion-item> -->
+      <!-- <ion-input *ngFor="let name of attDis.namesRNF | namesPipe:attDis.cntRNF; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attDis.namesRNF[i]" placeholder="Name"></ion-input> -->
+      <!-- <ion-item *ngFor="let name of attDis.namesRNF | namesPipe:attDis.cntRNF; let i = index;trackBy:trackByIdx">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Name</ion-label>
+                    <ion-input [(ngModel)]="attDis.namesRNF[i]" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Follow up by</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.RNF[i].by" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Follow up status</ion-label>
+                    <ion-input [(ngModel)]="arrFlwUp.RNF[i].status" class="ion-text-wrap" text-wrap>
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+
+      <!-- Prayer Meeting/Devotion -->
+      <ion-row>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-text class="att-title">Prayer Meeting/Devotion</ion-text>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let num of arrNum">
+        <ion-col size="auto">
+          <ion-text>{{num.Name}}</ion-text>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-select
+              class="select-attendance"
+              [(ngModel)]="num.attDev.attendance"
+              interface="popover"
+            >
+              <ion-select-option value="1">Attended </ion-select-option>
+              <ion-select-option value="0">Absent </ion-select-option>
+            </ion-select>
+            <!-- <ion-input *ngIf="num.attDev.attendance=='0'" placeholder="Absent reason" [(ngModel)]="num.attDev.reason">
+            </ion-input> -->
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NB - </ion-text>
+            <ion-input
+              [(ngModel)]="attDev.cntNB"
+              (ionChange)="cntChange('Dev','NB')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <ion-input
+            #nameRef
+            *ngFor="let name of attDev.namesNB | namesPipe:attDev.cntNB; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attDev.namesNB[i]"
+            placeholder="Name"
+            class="names"
+            autocomplete="nope"
+          ></ion-input>
+        </ion-col>
+      </ion-row>
+
+      <!-- Outreach/Evangelism -->
+      <!-- <ion-row>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-text class="att-title">Outreach/Evangelism</ion-text>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let num of arrNum">
+        <ion-col size="auto">
+          <ion-text>{{num.Name}}</ion-text>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-select class="select-attendance" [(ngModel)]="num.attOut.attendance" interface="popover">
+              <ion-select-option value="1">Attended
+              </ion-select-option>
+              <ion-select-option value="0">Absent
+              </ion-select-option>
+            </ion-select> -->
+      <!-- <ion-input *ngIf="num.attOut.attendance=='0'" placeholder="Absent reason" [(ngModel)]="num.attOut.reason">
+            </ion-input> -->
+      <!-- </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NB - </ion-text>
+            <ion-input [(ngModel)]="attOut.cntNB" (ionChange)="cntChange('Out','NB')" type="number"></ion-input>
+          </ion-item>
+          <ion-input *ngFor="let name of attOut.namesNB | namesPipe:attOut.cntNB; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attOut.namesNB[i]" placeholder="Name" class="names"></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NF - </ion-text>
+            <ion-input [(ngModel)]="attOut.cntNF" (ionChange)="cntChange('Out','NF')" type="number"></ion-input>
+          </ion-item>
+          <ion-input *ngFor="let name of attOut.namesNF | namesPipe:attOut.cntNF; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attOut.namesNF[i]" placeholder="Name" class="names"></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>RNF/BS - </ion-text>
+            <ion-input [(ngModel)]="attOut.cntRNF" (ionChange)="cntChange('Out','RNF')" type="number"></ion-input>
+          </ion-item>
+          <ion-input *ngFor="let name of attOut.namesRNF | namesPipe:attOut.cntRNF; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attOut.namesRNF[i]" placeholder="Name" class="names"></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>AC - </ion-text>
+            <ion-input [(ngModel)]="attOut.cntAC" (ionChange)="cntChange('Out','AC')" type="number"></ion-input>
+          </ion-item>
+          <ion-input *ngFor="let name of attOut.namesAC | namesPipe:attOut.cntAC; let i = index;trackBy:trackByIdx"
+            [(ngModel)]="attOut.namesAC[i]" placeholder="Name" class="names"></ion-input>
+        </ion-col>
+      </ion-row> -->
+
+      <!-- Abs CG -->
+      <!-- <ion-row>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-text class="att-title">CG Absent</ion-text>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let num of absCG" class="ion-align-items-center">
+        <ion-col size="auto" class="ion-text-center">
+          <ion-text>{{num.Name}}</ion-text>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="none"> -->
+      <!-- <ion-select class="select-attendance" [(ngModel)]="num.attService.attendance">
+              <ion-select-option value="1">Attended
+              </ion-select-option>
+              <ion-select-option value="0">Absent
+              </ion-select-option>
+            </ion-select> -->
+      <!-- <ion-label position="floating">Absent reason</ion-label>
+            <ion-input [(ngModel)]="num.attCG.reason" class="names">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+
+      <!-- Service -->
+      <ion-row>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-text *ngIf="selectTitle" class="att-title"
+              >{{arrTitleForTitles[selectTitle].serviceTitle}}</ion-text
+            >
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let num of arrNum" class="ion-align-items-center">
+        <ion-col size="auto">
+          <ion-text>{{num.Name}}</ion-text>
+        </ion-col>
+        <ion-col>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-select
+              class="select-attendance"
+              [(ngModel)]="num.attService.attendance"
+              interface="popover"
+            >
+              <ion-select-option value="1">Attended </ion-select-option>
+              <ion-select-option value="0">Absent </ion-select-option>
+            </ion-select>
+            <ion-select
+              *ngIf="num.attService.attendance=='1'"
+              class="select-attendance"
+              [(ngModel)]="num.attService.method"
+              interface="popover"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+            <ion-item *ngIf="num.attService.attendance=='0'">
+              <ion-label position="floating">Absent reason</ion-label>
+              <ion-input
+                class="service-abs-reason"
+                [(ngModel)]="num.attService.reason"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NB - </ion-text>
+            <ion-input
+              [(ngModel)]="attService.cntNB"
+              (ionChange)="cntChange('Service','NB')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <ion-item
+            *ngFor="let name of attService.namesNB | namesPipe:attService.cntNB; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attService.namesNB[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attService.methodNB[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>NF - </ion-text>
+            <ion-input
+              [(ngModel)]="attService.cntNF"
+              (ionChange)="cntChange('Service','NF')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <ion-item
+            *ngFor="let name of attService.namesNF | namesPipe:attService.cntNF; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attService.namesNF[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attService.methodNF[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>RNF/BS - </ion-text>
+            <ion-input
+              [(ngModel)]="attService.cntRNF"
+              (ionChange)="cntChange('Service','RNF')"
+              type="number"
+            >
+            </ion-input>
+          </ion-item>
+          <ion-item
+            *ngFor="let name of attService.namesRNF | namesPipe:attService.cntRNF; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attService.namesRNF[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attService.methodRNF[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="names-container">
+        <ion-col>
+          <ion-item fill="solid">
+            <ion-text>AC - </ion-text>
+            <ion-input
+              [(ngModel)]="attService.cntAC"
+              (ionChange)="cntChange('Service','AC')"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <ion-item
+            *ngFor="let name of attService.namesAC | namesPipe:attService.cntAC; let i = index;trackBy:trackByIdx"
+            lines="none"
+          >
+            <ion-input
+              #nameRef
+              [(ngModel)]="attService.namesAC[i]"
+              placeholder="Name"
+              class="names"
+              autocomplete="nope"
+            >
+            </ion-input>
+            <ion-select
+              [(ngModel)]="attService.methodAC[i]"
+              interface="popover"
+              class="select-method"
+            >
+              <ion-select-option value="0">Ground </ion-select-option>
+              <ion-select-option value="1">Sky </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- <ion-item>
+      
+      <ion-text *ngFor="let num of arrNum">{{num.Name}}</ion-text>
+    </ion-item> -->
+  </ion-item>
+
+  <ion-item *ngIf="selectCG">
+    <ion-button color="dark" class="btn-submit" (click)="submit($event)">
+      <ion-text> Submit </ion-text>
+    </ion-button>
+  </ion-item>
+
+  <!-- <ion-item class="ion-no-padding"> -->
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col *ngFor="let att of arrAtt" size="6" class="ion-no-padding">
+        <!-- <ion-item class="ion-no-padding"> -->
+        <ion-card (click)="copyAtt(att)">
+          <!-- <ion-card-title></ion-card-title> -->
+          <ion-card-content>
+            <ion-text>{{att.CG}}@{{att.title}}</ion-text><br /><br />
+            <!-- <b>In Time - Friday session</b><br> -->
+            <b>{{arrTitleForTitles[att.title].cgTitle}} </b><br />
+            {{ "Total - " + att.attCG.Total }}<br />
+            {{ "OM - " + att.attCG.OM }}<br />
+            {{ "NB - " + att.attCG.NB + (att.attCG.NB == 0 ? "" :
+            att.attCG.desNB) }}<br />
+            {{ "AC - " + att.attCG.AC + (att.attCG.AC == 0 ? "" :
+            att.attCG.desAC) }}<br />
+            {{ "NF - " + att.attCG.NF + (att.attCG.NF == 0 ? "" :
+            att.attCG.desNF) }}<br />
+            {{ "RNF - " + att.attCG.RNF + (att.attCG.RNF == 0 ? "" :
+            att.attCG.desRNF) }}<br />
+            {{ "Abs - " + att.attCG.Abs + (att.attCG.desAbs == "()" ? "" :
+            att.attCG.desAbs) }}
+            <br /><br />
+            <!-- <b>Discipleship/Follow Up</b><br>
+            {{ "Total - " + att.attDis.Total }}<br>
+            {{ "OM - " + att.attDis.OM }}<br>
+            {{ "NB - " + att.attDis.NB + (att.attDis.NB == 0 ? "" : att.attDis.desNB) }}<br>
+            {{ "NF - " + att.attDis.NF + (att.attDis.NF == 0 ? "" : att.attDis.desNF) }}<br>
+            {{ "RNF - " + att.attDis.RNF + (att.attDis.RNF == 0 ? "" : att.attDis.desRNF) }}<br>
+            {{ "Abs - " + att.attDis.Abs + (att.attDis.desAbs == "()" ? "" : att.attDis.desAbs) }}
+            <br><br> -->
+            <b>Prayer Meeting/Devotion</b><br />
+            {{ "Total - " + att.attDev.Total }}<br />
+            {{ "OM - " + att.attDev.OM }}<br />
+            {{ "NB - " + att.attDev.NB + (att.attDev.NB == 0 ? "" :
+            att.attDev.desNB) }}<br />
+            {{ "Abs - " + att.attDev.Abs + (att.attDev.desAbs == "()" ? "" :
+            att.attDev.desAbs) }}
+            <br /><br />
+            <!-- <b>Outreach/Evangelism</b><br>
+            {{ "Total - " + att.attOut.Total }}<br>
+            {{ "OM - " + att.attOut.OM }}<br>
+            {{ "NB - " + att.attOut.NB + (att.attOut.NB == 0 ? "" : att.attOut.desNB) }}<br>
+            {{ "NF - " + att.attOut.NF + (att.attOut.NF == 0 ? "" : att.attOut.desNF) }}<br>
+            {{ "RNF - " + att.attOut.RNF + (att.attOut.RNF == 0 ? "" : att.attOut.desRNF) }}<br>
+            {{ "AC - " + att.attOut.AC + (att.attOut.AC == 0 ? "" : att.attOut.desAC) }}<br>
+            {{ "Abs - " + att.attOut.Abs + (att.attOut.desAbs == "()" ? "" : att.attOut.desAbs) }}
+            <br><br> -->
+            <!-- <b>CG/Sky Activities</b><br>
+            {{ "Total - " + att.attCG.Total }}<br>
+            {{ "OM - " + att.attCG.OM }}<br>
+            {{ "NB - " + att.attCG.NB + (att.attCG.NB == 0 ? "" : att.attCG.desNB) }}<br>
+            {{ "NF - " + att.attCG.NF + (att.attCG.NF == 0 ? "" : att.attCG.desNF) }}<br>
+            {{ "RNF - " + att.attCG.RNF + (att.attCG.RNF == 0 ? "" : att.attCG.desRNF) }}<br>
+            {{ "AC - " + att.attCG.AC + (att.attCG.AC == 0 ? "" : att.attCG.desAC) }}<br>
+            {{ "Abs - " + att.attCG.Abs + (att.attCG.desAbs == "()" ? "" : att.attCG.desAbs) }}
+            <br><br> -->
+            <b>{{arrTitleForTitles[att.title].serviceTitle}}</b><br />
+            <!-- <b>In Time - Saturday & Sunday session</b><br> -->
+            {{ "Total - " + att.attService.Total }}<br />
+            {{ "OM - " + att.attService.OM }}<br />
+            {{ "NB - " + att.attService.NB + (att.attService.NB == 0 ? "" :
+            att.attService.desNB) }}<br />
+            {{ "NF - " + att.attService.NF + (att.attService.NF == 0 ? "" :
+            att.attService.desNF) }}<br />
+            {{ "RNF - " + att.attService.RNF + (att.attService.RNF == 0 ? "" :
+            att.attService.desRNF) }}<br />
+            {{ "AC - " + att.attService.AC + (att.attService.AC == 0 ? "" :
+            att.attService.desAC) }}<br />
+            {{ "Abs - " + att.attService.Abs + (att.attService.desAbs == "()" ?
+            "" : att.attService.desAbs) }}
+            <br /><br />
+            <b>Weekly Total Attendance</b><br />
+            {{ "Total - " + att.attW.Total }}<br />
+            {{ "OM - " + att.attW.OM }}<br />
+            {{ "NB - " + att.attW.NB + (att.attW.NB == 0 ? "" : att.attW.desNB)
+            }}<br />
+            {{ "NF - " + att.attW.NF + (att.attW.NF == 0 ? "" : att.attW.desNF)
+            }}<br />
+            {{ "RNF - " + att.attW.RNF + (att.attW.RNF == 0 ? "" :
+            att.attW.desRNF) }}<br />
+            {{ "AC - " + att.attW.AC + (att.attW.AC == 0 ? "" : att.attW.desAC)
+            }}<br />
+            {{ "Abs - " + att.attW.Abs + (att.attW.desAbs == "()" ? "" :
+            att.attW.desAbs) }}
+          </ion-card-content>
+        </ion-card>
+        <!-- </ion-item> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- </ion-item> -->
+
+  <!-- <ion-modal #modal [backdropDismiss]="false" class="loading-modal">
+    <ng-template>
+      <ion-item lines="none">
+        <ion-spinner class="spinner"></ion-spinner>
+        <ion-label>Loading......</ion-label>
+      </ion-item>
+    </ng-template>
+  </ion-modal> -->
+</ion-content>
+
+<!-- <ion-popover #inlinePopover showBackdrop="false" keyboardClose="false">
+  <ng-template>
+    <ion-content style="overflow: auto">
+      <ion-text *ngFor="let name of arrAutoCompleteResult"
+        >{{name}}<br
+      /></ion-text>
+    </ion-content>
+  </ng-template>
+</ion-popover> -->
+
+<datalist #name_datalist id="name_datalist"> </datalist>

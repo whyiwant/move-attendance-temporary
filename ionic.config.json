@@ -1,0 +1,7 @@
+{
+  "name": "move-attendance-temporary",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

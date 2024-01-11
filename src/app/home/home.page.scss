@@ -1,0 +1,131 @@
+ion-card-title {
+  font-size: x-small;
+}
+
+.select-CG {
+  width: fit-content;
+}
+
+.select-attendance {
+  border-width: 1px;
+  border-style: solid;
+  width: fit-content;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  // margin-left: -7px;
+  padding-left: 7px;
+}
+
+.att-title {
+  font-size: large;
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-top: 10px;
+}
+
+.names-container ion-item ion-input {
+  margin-left: 4px;
+}
+
+.service-abs-reason {
+  margin-left: 7px;
+}
+
+.btn-submit {
+  width: 100%;
+  height: 60px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+ion-grid .md .hydrated {
+  --min-height: 0px;
+}
+
+.names {
+  border-bottom: solid 1px gray;
+  width: fit-content;
+}
+
+.cnt {
+  width: fit-content;
+}
+
+.select-method {
+  border-bottom: solid 1px gray;
+}
+
+ion-card {
+  margin: 1px;
+  border-style: solid;
+  border-width: 1px;
+}
+
+ion-card-content {
+  font-size: smaller;
+  padding: 4px;
+  ion-text {
+    font-size: small;
+  }
+}
+
+b {
+  text-decoration: underline;
+}
+
+@media (max-width: 430px) {
+  // ion-title {
+  //   font-size: small;
+  //   --padding-start: 0;
+  //   --padding-end: 0px;
+  //   --inner-padding-start: 0;
+  //   --inner-padding-end: 0px;
+  // }
+
+  .btnLogin {
+    font-size: x-small;
+  }
+}
+
+// .loading-modal {
+//   --width: auto;
+//   --height: auto;
+//   --max-width: 90%;
+//   --max-height: 90%;
+//   --overflow: auto;
+
+//   // --box-shadow: 5px 5px 20px grey;
+//   // backdrop-filter: blur(3px);
+
+//   >.ion-page {
+//       position: static;
+//       contain: initial;
+//   }
+// }
+
+// .spinner {
+//   margin-top: 20px;
+//   margin-bottom: 20px;
+//   margin-right: 20px;
+// }
+
+// .custom-modal {
+//   // --backdrop-opacity: 1;
+//   backdrop-filter: blur(3px);
+
+//   // &::part(backdrop) {
+//   //     background: #000;
+//   // }
+
+//   // &::part(handle) {
+//   //     background: var(--ion-color-primary);
+//   //     width: 150px;
+//   //     height: 6px;
+//   // }
+
+//   &::part(content) {
+//       border-radius: 20px; // Here the border radius
+//       box-shadow: 0px 0px 20px 5px rgb(0 0 0 / 32%);
+//   }
+// }
