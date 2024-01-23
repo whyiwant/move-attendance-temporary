@@ -1,0 +1,34 @@
+b {
+  text-decoration: underline;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+th,
+td {
+  padding: 10px;
+}
+
+@media (max-width: 800px) {
+  table {
+    font-size: small;
+  }
+}
+
+@media (max-width: 430px) {
+  // ion-title {
+  //   font-size: small;
+  //   --padding-start: 0;
+  //   --padding-end: 0px;
+  //   --inner-padding-start: 0;
+  //   --inner-padding-end: 0px;
+  // }
+
+  .btnLogin {
+    font-size: x-small;
+  }
+}

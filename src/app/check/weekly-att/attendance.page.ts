@@ -42,6 +42,7 @@ class Att {
   reset() {
     this.sky.reset();
     this.ground.reset();
+    this.cntAbs = 0;
   }
 }
 
@@ -116,7 +117,7 @@ export class AttendancePage implements OnInit {
   }
 
   titleSelected() {
-    this.location.go('/check-att?title=' + this.selectTitle.title);
+    this.location.go('/check-weekly-att?title=' + this.selectTitle.title);
     const q = query(
       ref(this.db, 'new_online_attendance2022/atts'),
       orderByChild('title'),

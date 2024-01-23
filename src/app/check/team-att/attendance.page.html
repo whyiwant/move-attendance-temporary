@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="name">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-no-padding" *ngIf="name"
+      >Check Team Attendance</ion-title
+    >
+    <ion-title *ngIf="!name">Check Team Attendance</ion-title>
+    <ion-button
+      slot="end"
+      class="btnLogin"
+      style="padding-right: 10px"
+      routerLink="/login"
+      *ngIf="!name"
+    >
+      <ion-icon name="person-outline" style="padding-right: 5px"></ion-icon>
+      Login
+    </ion-button>
+    <ion-item *ngIf="name" slot="end" lines="none" class="username">
+      <ion-label style="font-size: xx-small" *ngIf="name">{{name}}</ion-label>
+      <ion-button
+        fill="outline"
+        style="height: 25px"
+        (click)="logout()"
+        *ngIf="name"
+      >
+        <ion-icon name="exit"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="arrTitle.length">
+  <ion-list>
+    <ion-item>
+      <ion-select
+        [(ngModel)]="cluster"
+        interface="popover"
+        placeholder="Select cluster"
+        (ionChange)="clusterSelected(); showTotalAtt()"
+      >
+        <ion-select-option *ngFor="let c of arrCluster | keyvalue" [value]="c"
+          >{{ c.key }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select
+        [(ngModel)]="smallTeam"
+        interface="popover"
+        placeholder="Select small team"
+        (ionChange)="stSelected(); showTotalAtt()"
+      >
+        <span *ngFor="let st of arrST">
+          <ion-select-option [value]="st">{{ st }}</ion-select-option>
+        </span>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select
+        [(ngModel)]="cg"
+        interface="popover"
+        placeholder="Select CG"
+        (ionChange)="showTotalAtt()"
+      >
+        <span *ngFor="let _cg of arrCG">
+          <ion-select-option
+            *ngIf="cluster && smallTeam && _cg.cluster == cluster.key && _cg.smallTeam == smallTeam && !_cg.del"
+            [value]="_cg.CG"
+            >{{ _cg.CG }}</ion-select-option
+          >
+        </span>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-item *ngIf="cluster" style="overflow: auto">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">Title</th>
+          <th colspan="9">CG</th>
+          <th colspan="9">YW Service</th>
+        </tr>
+        <tr>
+          <th>Total</th>
+          <th>OM</th>
+          <th>Sky OM</th>
+          <th>NB</th>
+          <th>AC</th>
+          <th>NF</th>
+          <th>RNF</th>
+          <th>Sky NB/NF</th>
+          <th>Abs</th>
+          <th>Total</th>
+          <th>OM</th>
+          <th>Sky OM</th>
+          <th>NB</th>
+          <th>AC</th>
+          <th>NF</th>
+          <th>RNF</th>
+          <th>Sky NB/NF</th>
+          <th>Abs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let att of arrFilteredAtt">
+          <td>{{ att.title.title }}</td>
+          <td>{{ att.attCG.ground.t + att.attCG.sky.t }}</td>
+          <td>{{ att.attCG.ground.cntOM }}</td>
+          <td>{{ att.attCG.sky.cntOM }}</td>
+          <td>{{ att.attCG.ground.cntNB }}</td>
+          <td>{{ att.attCG.ground.cntAC + att.attCG.sky.cntAC}}</td>
+          <td>{{ att.attCG.ground.cntNF }}</td>
+          <td>{{ att.attCG.ground.cntRNF }}</td>
+          <td>
+            {{ att.attCG.sky.cntNB + att.attCG.sky.cntNF + att.attCG.sky.cntRNF
+            }}
+          </td>
+          <td>{{ att.attCG.cntAbs }}</td>
+          <td>{{ att.attService.ground.t + att.attService.sky.t }}</td>
+          <td>{{ att.attService.ground.cntOM }}</td>
+          <td>{{ att.attService.sky.cntOM }}</td>
+          <td>{{ att.attService.ground.cntNB }}</td>
+          <td>{{ att.attService.ground.cntAC + att.attService.sky.cntAC}}</td>
+          <td>{{ att.attService.ground.cntNF }}</td>
+          <td>{{ att.attService.ground.cntRNF }}</td>
+          <td>
+            {{ att.attService.sky.cntNB + att.attService.sky.cntNF +
+            att.attService.sky.cntRNF }}
+          </td>
+          <td>{{ att.attService.cntAbs }}</td>
+        </tr>
+        <!-- <tr>
+          <td>Total</td>
+          <td>{{ attCG.sky.total + attCG.ground.total }}</td>
+          <td>{{ attCG.ground.cntOM }}</td>
+          <td>{{ attCG.sky.cntOM }}</td>
+          <td>{{ attCG.ground.cntNB }}</td>
+          <td>{{ attCG.ground.cntAC + attCG.sky.cntAC }}</td>
+          <td>{{ attCG.ground.cntNF }}</td>
+          <td>{{ attCG.ground.cntRNF }}</td>
+          <td>{{ attCG.sky.cntNB + attCG.sky.cntNF + attCG.sky.cntRNF }}</td>
+          <td>{{ attCG.cntAbs }}</td>
+          <td>{{ attService.sky.total + attService.ground.total }}</td>
+          <td>{{ attService.ground.cntOM }}</td>
+          <td>{{ attService.sky.cntOM }}</td>
+          <td>{{ attService.ground.cntNB }}</td>
+          <td>{{ attService.ground.cntAC + attService.sky.cntAC }}</td>
+          <td>{{ attService.ground.cntNF }}</td>
+          <td>{{ attService.ground.cntRNF }}</td>
+          <td>
+            {{ attService.sky.cntNB + attService.sky.cntNF +
+            attService.sky.cntRNF }}
+          </td>
+          <td>{{ attService.cntAbs }}</td>
+        </tr> -->
+      </tbody>
+    </table>
+  </ion-item>
+</ion-content>

@@ -16,7 +16,12 @@ export class AppComponent {
       url: '/home',
       icon: 'pencil',
     },
-    { title: 'Check Attendance', url: '/check-att', icon: 'book' },
+    {
+      title: 'Check Attendance (Weekly)',
+      url: '/check-weekly-att',
+      icon: 'book',
+    },
+    { title: 'Check Attendance (Team)', url: '/check-team-att', icon: 'book' },
     { title: 'Add Title', url: '/add-title', icon: 'add' },
   ];
 
