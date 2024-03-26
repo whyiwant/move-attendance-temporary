@@ -75,6 +75,58 @@
     </ion-item>
   </ion-list>
 
+  <ion-item lines="none">
+    <ion-label>Show Chart</ion-label>
+    <ion-toggle
+      [enableOnOffLabels]="true"
+      slot="start"
+      [(ngModel)]="showChart"
+    ></ion-toggle>
+  </ion-item>
+
+  <div style="overflow: auto" [hidden]="!showChart">
+    <div style="display: flex">
+      <ion-select
+        placeholder="Select start date"
+        [(ngModel)]="selectStartTitle"
+        label="Select start date"
+        label-placement="stacked"
+        interface="popover"
+        style="width: 20%"
+        (ionChange)="rangeChanged()"
+      >
+        <ion-select-option *ngFor="let title of arrTitle" [value]="title"
+          >{{title.title}}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-select
+        placeholder="Select end date"
+        [(ngModel)]="selectEndTitle"
+        interface="popover"
+        style="width: 20%"
+        (ionChange)="rangeChanged()"
+      >
+        <ion-select-option *ngFor="let title of arrTitle" [value]="title"
+          >{{title.title}}
+        </ion-select-option>
+      </ion-select>
+    </div>
+
+    <ngx-charts-line-chart
+      [legend]="legend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="xAxis"
+      [yAxis]="yAxis"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [timeline]="timeline"
+      [results]="data"
+    >
+    </ngx-charts-line-chart>
+  </div>
+
   <ion-item *ngIf="cluster" style="overflow: auto">
     <table>
       <thead>

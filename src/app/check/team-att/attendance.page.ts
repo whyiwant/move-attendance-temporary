@@ -2,17 +2,8 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { log } from 'firebase-functions/logger';
 import { Auth, getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import {
-  Database,
-  equalTo,
-  getDatabase,
-  onValue,
-  orderByChild,
-  query,
-  ref,
-} from 'firebase/database';
+import { Database, getDatabase, onValue, ref } from 'firebase/database';
 
 class IAtt {
   t: number = 0;
@@ -75,6 +66,8 @@ export class AttendancePage implements OnInit {
   arrNum = [];
 
   selectTitle: any;
+  selectStartTitle: any;
+  selectEndTitle: any;
 
   attCG: Att = new Att();
   attDev: Att = new Att();
@@ -89,6 +82,21 @@ export class AttendancePage implements OnInit {
 
   auth!: Auth;
   name: string | null = '';
+
+  data = [];
+  view: [number, number] = [700, 300];
+  // options
+  legend: boolean = true;
+  showLabels: boolean = true;
+  animations: boolean = true;
+  xAxis: boolean = true;
+  yAxis: boolean = true;
+  showYAxisLabel: boolean = true;
+  showXAxisLabel: boolean = true;
+  xAxisLabel: string = 'Title';
+  yAxisLabel: string = 'Attendance';
+  timeline: boolean = true;
+  showChart: any = false;
 
   constructor(
     private title: Title,
@@ -338,6 +346,78 @@ export class AttendancePage implements OnInit {
         attService: JSON.parse(JSON.stringify(this.attService)),
       });
     }
+
+    const seriesTotal = [];
+    const seriesOM = [];
+    const seriesNB = [];
+    for (let att of this.arrFilteredAtt) {
+      seriesTotal.push({
+        name: att.title.title,
+        value: att.attService.ground.t + att.attService.sky.t,
+      });
+      seriesOM.push({
+        name: att.title.title,
+        value: att.attService.ground.cntOM + att.attService.sky.cntOM,
+      });
+      seriesNB.push({
+        name: att.title.title,
+        value: att.attService.ground.cntNB + att.attService.sky.cntNB,
+      });
+    }
+    this.data = [
+      { name: 'Service', series: seriesTotal.reverse() },
+      { name: 'Service OM', series: seriesOM.reverse() },
+      { name: 'Service NB', series: seriesNB.reverse() },
+    ];
+  }
+
+  rangeChanged() {
+    let seriesTotal = [];
+    let seriesOM = [];
+    let seriesNB = [];
+
+    let arrFilteredAtt = this.arrFilteredAtt.reverse();
+    let started = false;
+
+    for (let att of arrFilteredAtt) {
+      if (
+        this.selectStartTitle &&
+        this.selectStartTitle.title == att.title.title
+      ) {
+        started = true;
+      }
+
+      if (this.selectStartTitle && !started) continue;
+
+      if (this.selectEndTitle && this.selectEndTitle.title == att.title.title) {
+        break;
+      }
+
+      seriesTotal.push({
+        name: att.title.title,
+        value: att.attService.ground.t + att.attService.sky.t,
+      });
+      seriesOM.push({
+        name: att.title.title,
+        value: att.attService.ground.cntOM + att.attService.sky.cntOM,
+      });
+      seriesNB.push({
+        name: att.title.title,
+        value: att.attService.ground.cntNB + att.attService.sky.cntNB,
+      });
+    }
+
+    // this.data = [
+    //   { name: 'Service', series: seriesTotal.reverse() },
+    //   { name: 'Service OM', series: seriesOM.reverse() },
+    //   { name: 'Service NB', series: seriesNB.reverse() },
+    // ];
+
+    this.data = [
+      { name: 'Service', series: seriesTotal },
+      { name: 'Service OM', series: seriesOM },
+      { name: 'Service NB', series: seriesNB },
+    ];
   }
 
   logout() {

@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { AttendancePageRoutingModule } from './attendance-routing.module';
 
 import { AttendancePage } from './attendance.page';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AttendancePageRoutingModule
+    AttendancePageRoutingModule,
+    NgxChartsModule,
   ],
-  declarations: [AttendancePage]
+  declarations: [AttendancePage],
 })
 export class AttendancePageModule {}
