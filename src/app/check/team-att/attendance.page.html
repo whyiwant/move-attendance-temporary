@@ -82,9 +82,10 @@
       slot="start"
       [(ngModel)]="showChart"
     ></ion-toggle>
+    <ion-button (click)="print()">Print</ion-button>
   </ion-item>
 
-  <div style="overflow: auto" [hidden]="!showChart">
+  <div style="overflow: auto" [hidden]="!showChart" id="idChart">
     <div style="display: flex">
       <ion-select
         placeholder="Select start date"
@@ -114,6 +115,7 @@
     </div>
 
     <ngx-charts-line-chart
+      #chart
       [legend]="legend"
       [showXAxisLabel]="showXAxisLabel"
       [showYAxisLabel]="showYAxisLabel"
