@@ -1,9 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Auth, getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { Database, getDatabase, onValue, ref } from 'firebase/database';
+import DomToImage from 'dom-to-image';
+import { ChartService } from 'src/app/services/chart.service';
 
 class IAtt {
   t: number = 0;
@@ -83,11 +85,11 @@ export class AttendancePage implements OnInit {
   auth!: Auth;
   name: string | null = '';
 
+  @ViewChild('chart') chart: any;
   data = [];
   view: [number, number] = [700, 300];
   // options
   legend: boolean = true;
-  showLabels: boolean = true;
   animations: boolean = true;
   xAxis: boolean = true;
   yAxis: boolean = true;
@@ -102,7 +104,8 @@ export class AttendancePage implements OnInit {
     private title: Title,
     private location: Location,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private chartService: ChartService
   ) {
     this.auth = getAuth();
     onAuthStateChanged(this.auth, (user) => {
@@ -376,7 +379,12 @@ export class AttendancePage implements OnInit {
     let seriesOM = [];
     let seriesNB = [];
 
-    let arrFilteredAtt = this.arrFilteredAtt.reverse();
+    let arrFilteredAtt = [...this.arrFilteredAtt]; // clone array
+
+    // reverse array
+    // reverse() directly mutate the array itself
+    arrFilteredAtt.reverse();
+
     let started = false;
 
     for (let att of arrFilteredAtt) {
@@ -418,6 +426,32 @@ export class AttendancePage implements OnInit {
       { name: 'Service OM', series: seriesOM },
       { name: 'Service NB', series: seriesNB },
     ];
+
+    // https://stackoverflow.com/questions/56050291/ngx-charts-line-chart-how-to-show-the-line-chart-with-dot-for-the-data-point-al
+    // this.chartService.showDots(this.chart);
+
+    // setTimeout(() => {
+    //   this.chartService.showDots(this.chart);
+    // }, 0);
+  }
+
+  print() {
+    // console.log('print');
+
+    var node = document.getElementById('idChart');
+    DomToImage.toPng(node, { bgcolor: 'white' }).then(function (dataUrl) {
+      // console.log('then');
+      // console.log(dataUrl);
+
+      var link = document.createElement('a');
+      link.download = 'my-image-name.jpeg';
+      link.href = dataUrl;
+      link.click();
+
+      // var img = new Image();
+      // img.src = dataUrl;
+      // document.appendChild(img);
+    });
   }
 
   logout() {
