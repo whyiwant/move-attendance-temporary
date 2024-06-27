@@ -1,0 +1,22 @@
+.btn-close {
+  margin-right: 15px;
+}
+
+.loading-modal {
+  --width: auto;
+  --height: auto;
+  --max-width: 90%;
+  --max-height: 90%;
+  --overflow: auto;
+
+  > .ion-page {
+    position: static;
+    contain: initial;
+  }
+}
+
+.spinner {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}

@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+    <ion-icon name="close" (click)="close()" slot="end" class="btn-close"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item lines="none" class="input" style="margin-top: 50px;">
+    <ion-label color="primary" position="stacked">Email</ion-label>
+    <ion-input color="primary" placeholder="Enter your email" [(ngModel)]="email" type="email"></ion-input>
+    <ion-icon name="mail" color="primary" slot="end" style="align-self: center;"></ion-icon>
+  </ion-item>
+
+  <ion-item lines="none" class="input" style="margin-top: 20px;">
+    <ion-label color="primary" position="stacked">Password</ion-label>
+    <ion-input color="primary" placeholder="Enter password" [(ngModel)]="password"></ion-input>
+    <ion-icon name="lock-closed" color="primary" slot="end" style="align-self: center;"></ion-icon>
+  </ion-item>
+
+  <ion-button (click)="reg()" fill="outline" style="margin-top: 20px;">Register</ion-button>
+
+  <div id="sign-in-button"></div>
+</ion-content>

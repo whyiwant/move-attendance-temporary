@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit</ion-title>
+    <ion-icon name="close" (click)="close()" slot="end" class="btn-close"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-select [(ngModel)]="cluster" interface="popover" placeholder="Select cluster">
+        <ion-select-option *ngFor="let c of arrCluster | keyvalue" [value]="c.value">{{ c.value.name
+          }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select [(ngModel)]="smallTeam" interface="popover" placeholder="Select small team">
+        <span *ngFor="let st of arrST | keyvalue">
+          <ion-select-option *ngIf="cluster && st.value.cluster == cluster.id" [value]="st.value">{{ st.value.name
+            }}</ion-select-option>
+        </span>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select [(ngModel)]="cg" interface="popover" placeholder="Select CG">
+        <span *ngFor="let _cg of arrCG | keyvalue">
+          <ion-select-option
+            *ngIf="!_cg.value.del &&cluster && smallTeam && _cg.value.cluster == cluster.id && _cg.value.st == smallTeam.id"
+            [value]="_cg.value">{{ _cg.value.name
+            }}</ion-select-option>
+        </span>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <div padding>
+    <ion-button color="primary" expand="block" (click)="edit()"
+      [disabled]="!(cluster && smallTeam && cg)">Confirm</ion-button>
+  </div>
+
+  <ion-modal #modal [backdropDismiss]="false" class="loading-modal">
+    <ng-template>
+      <ion-item>
+        <ion-spinner class="spinner"></ion-spinner>
+        <ion-label>Submitting......</ion-label>
+      </ion-item>
+    </ng-template>
+  </ion-modal>
+</ion-content>

@@ -55,7 +55,30 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () =>
-      import('./login/login.module').then((m) => m.LoginPageModule),
+      import('./auth/login-email/login-email.module').then(
+        (m) => m.LoginEmailPageModule
+      ),
+  },
+  {
+    path: 'register-email',
+    loadChildren: () =>
+      import('./auth/register-email/register-email.module').then(
+        (m) => m.RegisterEmailPageModule
+      ),
+  },
+  {
+    path: 'forget-password',
+    loadChildren: () =>
+      import('./auth/forget-password/forget-password.module').then(
+        (m) => m.ForgetPasswordPageModule
+      ),
+  },
+  {
+    path: 'user-management',
+    loadChildren: () =>
+      import('./auth/user-management/user-management.module').then(
+        (m) => m.UserManagementPageModule
+      ),
   },
 ];
 

@@ -115,11 +115,15 @@ export class HomePage implements AfterViewInit {
     this.auth = getAuth();
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
+        console.log(user);
+
         const uid = user.uid;
         console.log(user.displayName);
         console.log(user.phoneNumber);
         if (user.displayName) {
           this.name = user.displayName;
+        } else if (user.email) {
+          this.name = user.email;
         } else {
           this.name = user.phoneNumber;
         }
