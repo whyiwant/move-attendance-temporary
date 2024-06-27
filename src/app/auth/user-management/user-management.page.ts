@@ -15,6 +15,7 @@ import {
   onValue,
   update,
   push,
+  remove,
 } from 'firebase/database';
 import { ModalController, ToastController } from '@ionic/angular';
 import { EditPastoralTeamComponent } from './edit-pastoral-team/edit-pastoral-team.component';
@@ -171,6 +172,22 @@ export class UserManagementPage implements OnInit {
     }
     modal.dismiss();
     this.title.setTitle('User Management Console');
+  }
+
+  delAssignedCG(user: any, cg: any) {
+    // console.log(cg);
+    const dataRef = ref(
+      this.db,
+      'new_online_attendance2022/users/' + user.id + '/assigned_cg/' + cg.key
+    );
+    remove(dataRef)
+      .then(() => {
+        // presentToast("D")
+      })
+      .catch((e) => {
+        presentToast('Error!', this.toastController, 1000);
+        console.log(e);
+      });
   }
 
   changeUserLevel(user: any) {

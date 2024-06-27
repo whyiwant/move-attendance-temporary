@@ -77,7 +77,10 @@
               *ngFor="let cg of user.assigned_cg | keyvalue"
               lines="none"
               >{{arrAttCG[cg.value].CG}}
-              <ion-icon name="close"></ion-icon>
+              <ion-icon
+                name="close"
+                (click)="delAssignedCG(user, cg)"
+              ></ion-icon>
             </ion-item>
           </ion-list>
         </ion-col>

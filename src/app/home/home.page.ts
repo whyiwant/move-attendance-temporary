@@ -32,6 +32,7 @@ import {
 } from 'firebase/database';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Auth, getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { log } from 'firebase-functions/logger';
 
 @Component({
   selector: 'app-home',
@@ -56,6 +57,8 @@ export class HomePage implements AfterViewInit {
   arrAtt = [];
   arrNum = [];
   arrAutoComplete: string[] = [];
+
+  arrUserAssignedCG = [];
 
   selectCG: any;
   selectTitle: any;
@@ -127,9 +130,20 @@ export class HomePage implements AfterViewInit {
         } else {
           this.name = user.phoneNumber;
         }
+
+        onValue(
+          ref(
+            this.db,
+            'new_online_attendance2022/users/' + user.uid + '/assigned_cg'
+          ),
+          (s) => {
+            this.arrUserAssignedCG = Object.values(s.val());
+            console.log(this.arrUserAssignedCG);
+          }
+        );
       } else {
         console.log('No user.');
-        router.navigate(['']);
+        // router.navigate(['']);
       }
     });
 
@@ -139,7 +153,12 @@ export class HomePage implements AfterViewInit {
     this.ref = ref(this.db, 'new_online_attendance2022');
 
     onValue(ref(this.db, 'new_online_attendance2022/CGs'), (ss1) => {
-      this.arrCG = Object.values(ss1.val());
+      // this.arrCG = Object.values(ss1.val());
+      this.arrCG = Object.keys(ss1.val()).map((key) => ({
+        id: key,
+        ...ss1.val()[key],
+      }));
+
       onValue(ref(this.db, 'new_online_attendance2022/titles'), (ss2) => {
         this.arrTitleForTitles = ss2.val();
         this.arrTitle = Object.values(ss2.val());
@@ -234,28 +253,31 @@ export class HomePage implements AfterViewInit {
   }
 
   get filteredCG() {
-    return this.arrCG
-      .filter((x) => !x.del)
-      .sort((obj1, obj2) => {
-        if (obj1.smallTeam > obj2.smallTeam) {
-          return 1;
-        } else if (obj1.smallTeam < obj2.smallTeam) {
-          return -1;
-        } else {
-          if (obj1.CGnumber > obj2.CGnumber) {
+    return (
+      this.arrCG
+        // .filter((x) => !x.del)
+        .filter((x) => !x.del && this.arrUserAssignedCG.includes(x.id))
+        .sort((obj1, obj2) => {
+          if (obj1.smallTeam > obj2.smallTeam) {
             return 1;
-          } else if (obj1.CGnumber < obj2.CGnumber) {
+          } else if (obj1.smallTeam < obj2.smallTeam) {
             return -1;
           } else {
-            if (obj1.CG > obj2.CG) {
+            if (obj1.CGnumber > obj2.CGnumber) {
               return 1;
-            } else if (obj1.CG < obj2.CG) {
+            } else if (obj1.CGnumber < obj2.CGnumber) {
               return -1;
+            } else {
+              if (obj1.CG > obj2.CG) {
+                return 1;
+              } else if (obj1.CG < obj2.CG) {
+                return -1;
+              }
             }
           }
-        }
-        return 0;
-      });
+          return 0;
+        })
+    );
   }
 
   async change(e) {
