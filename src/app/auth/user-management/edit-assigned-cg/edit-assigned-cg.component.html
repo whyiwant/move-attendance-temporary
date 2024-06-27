@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Assign CG</ion-title>
+    <ion-icon
+      name="close"
+      (click)="close()"
+      slot="end"
+      class="btn-close"
+    ></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item class="select-CG">
+    <ionic-selectable
+      [(ngModel)]="selectCG"
+      [items]="filteredCG"
+      itemTextField="CG"
+      itemValueField="CG"
+      groupValueField="smallTeam"
+      groupTextField="smallTeam"
+      (onChange)="change($event)"
+      (onClose)="onclose()"
+      placeholder="Select CG"
+    >
+      <ng-template ionicSelectableGroupTemplate let-group="group">
+        {{ group.text }}
+      </ng-template>
+    </ionic-selectable>
+  </ion-item>
+</ion-content>

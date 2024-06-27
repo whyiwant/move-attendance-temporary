@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit</ion-title>
+    <ion-icon name="close" (click)="close()" slot="end" class="btn-close"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input [(ngModel)]="name"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <div padding>
+    <ion-button color="primary" expand="block" (click)="edit()" [disabled]="!name">Confirm</ion-button>
+  </div>
+
+  <ion-modal #modal [backdropDismiss]="false" class="loading-modal">
+    <ng-template>
+      <ion-item>
+        <ion-spinner class="spinner"></ion-spinner>
+        <ion-label>Submitting......</ion-label>
+      </ion-item>
+    </ng-template>
+  </ion-modal>
+</ion-content>
