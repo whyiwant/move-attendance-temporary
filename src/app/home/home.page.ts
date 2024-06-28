@@ -137,7 +137,9 @@ export class HomePage implements AfterViewInit {
             'new_online_attendance2022/users/' + user.uid + '/assigned_cg'
           ),
           (s) => {
-            this.arrUserAssignedCG = Object.values(s.val());
+            if (s.exists()) {
+              this.arrUserAssignedCG = Object.values(s.val());
+            }
             console.log(this.arrUserAssignedCG);
           }
         );
