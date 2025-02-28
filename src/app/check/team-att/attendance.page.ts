@@ -2,10 +2,11 @@ import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Auth, getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { Database, getDatabase, onValue, ref } from 'firebase/database';
+import { signOut } from 'firebase/auth';
+import { onValue, ref } from 'firebase/database';
 import DomToImage from 'dom-to-image';
 import { ChartService } from 'src/app/services/chart.service';
+import { BasePage } from 'src/interface/BasePage';
 
 class IAtt {
   t: number = 0;
@@ -51,8 +52,8 @@ class Att {
   templateUrl: './attendance.page.html',
   styleUrls: ['./attendance.page.scss'],
 })
-export class AttendancePage implements OnInit {
-  db: Database;
+export class AttendancePage extends BasePage implements OnInit {
+  // db: Database;
   ref: any;
 
   cluster: any;
@@ -82,8 +83,8 @@ export class AttendancePage implements OnInit {
     attService: Att;
   }[] = [];
 
-  auth!: Auth;
-  name: string | null = '';
+  // auth!: Auth;
+  // name: string | null = '';
 
   @ViewChild('chart') chart: any;
   data = [];
@@ -104,27 +105,28 @@ export class AttendancePage implements OnInit {
     private title: Title,
     private location: Location,
     private route: ActivatedRoute,
-    private router: Router,
+    router: Router,
     private chartService: ChartService
   ) {
-    this.auth = getAuth();
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        const uid = user.uid;
-        console.log(user.displayName);
-        console.log(user.phoneNumber);
-        if (user.displayName) {
-          this.name = user.displayName;
-        } else {
-          this.name = user.phoneNumber;
-        }
-      } else {
-        console.log('No user.');
-        router.navigate(['']);
-      }
-    });
+    super(router, true);
+    // this.auth = getAuth();
+    // onAuthStateChanged(this.auth, (user) => {
+    //   if (user) {
+    //     const uid = user.uid;
+    //     console.log(user.displayName);
+    //     console.log(user.phoneNumber);
+    //     if (user.displayName) {
+    //       this.name = user.displayName;
+    //     } else {
+    //       this.name = user.phoneNumber;
+    //     }
+    //   } else {
+    //     console.log('No user.');
+    //     router.navigate(['']);
+    //   }
+    // });
 
-    this.db = getDatabase();
+    // this.db = getDatabase();
 
     onValue(ref(this.db, 'new_online_attendance2022/titles'), (ss) => {
       this.arrTitle = Object.values(ss.val());

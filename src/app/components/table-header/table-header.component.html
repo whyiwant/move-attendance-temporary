@@ -1,0 +1,15 @@
+<div style="display: flex">
+  {{ headerTitle }}
+  <div style="display: flex; justify-content: center; align-items: center">
+    <ion-icon
+      *ngIf="isAsc"
+      name="arrow-down-outline"
+      (click)="sortFunc()"
+    ></ion-icon>
+    <ion-icon
+      *ngIf="!isAsc"
+      name="arrow-up-outline"
+      (click)="sortFunc()"
+    ></ion-icon>
+  </div>
+</div>

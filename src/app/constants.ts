@@ -9,51 +9,19 @@ export const PERMISSION = {
 };
 
 const PERMISSION_TYPE = {
-  monthlyReport: [PERMISSION.SUPER_USER, PERMISSION.TL],
-  read: [PERMISSION.SUPER_USER, PERMISSION.TL, PERMISSION.SCGL, PERMISSION.CGL],
+  check: [PERMISSION.SUPER_USER, PERMISSION.TL, PERMISSION.SCGL],
 };
 
 export const CHECK_PERMISSION = {
-  canViewMonthlyReport: (user: any) => {
+  canCheckAtt: (user: any) => {
     if (user) {
       if (user.permission) {
-        if (PERMISSION_TYPE.monthlyReport.includes(user.permission)) {
+        if (PERMISSION_TYPE.check.includes(user.permission)) {
           return true;
         } else {
           return false;
         }
       } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  },
-  canViewRead: (user: any) => {
-    if (user) {
-      if (user.permission) {
-        if (PERMISSION_TYPE.read.includes(user.permission)) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  },
-  canViewPast: (user: any) => {
-    if (user) {
-      if (user.permission) {
-        if (user.permission != PERMISSION.NOT_VERIFIED) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        // permission property not available
         return false;
       }
     } else {

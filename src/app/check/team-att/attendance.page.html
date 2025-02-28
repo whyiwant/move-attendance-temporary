@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="name">
       <ion-menu-button></ion-menu-button>
@@ -29,7 +29,12 @@
       </ion-button>
     </ion-item>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
+<app-nav-bar
+  title="Check Team Attendance"
+  [auth]="auth"
+  [user]="user"
+></app-nav-bar>
 
 <ion-content [fullscreen]="true" *ngIf="arrTitle.length">
   <ion-list>

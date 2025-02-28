@@ -15,6 +15,7 @@ import {
   onValue,
   update,
   push,
+  remove,
 } from 'firebase/database';
 import { ModalController, ToastController } from '@ionic/angular';
 import { EditPastoralTeamComponent } from './edit-pastoral-team/edit-pastoral-team.component';
@@ -23,17 +24,17 @@ import { EditNameComponent } from './edit-name/edit-name.component';
 import { presentToast } from 'src/helper';
 import { PERMISSION } from 'src/app/constants';
 import { EditAssignedCGComponent } from './edit-assigned-cg/edit-assigned-cg.component';
-import { log } from 'firebase-functions/logger';
+import { BasePage } from 'src/interface/BasePage';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.page.html',
   styleUrls: ['./user-management.page.scss'],
 })
-export class UserManagementPage implements OnInit {
-  auth!: Auth;
-  user!: User | null;
-  db!: Database;
+export class UserManagementPage extends BasePage implements OnInit {
+  // auth!: Auth;
+  // user!: User | null;
+  // db!: Database;
 
   arrUser: any[] = [];
   arrPermission = [
@@ -52,33 +53,34 @@ export class UserManagementPage implements OnInit {
   arrAttCG: any[] = [];
 
   constructor(
-    private router: Router,
+    router: Router,
     private modelCtrl: ModalController,
     private title: Title,
     private toastController: ToastController
   ) {
-    this.auth = getAuth();
-    this.db = getDatabase();
+    // this.auth = getAuth();
+    // this.db = getDatabase();
+    super(router, true);
 
-    onAuthStateChanged(this.auth, (user) => {
-      this.user = user;
-      if (user) {
-        const userRef = ref(
-          this.db,
-          'new_online_attendance2022/users/' + user.uid
-        );
-        get(userRef).then((v) => {
-          if (v.exists()) {
-            if (v.val()['permission'] == PERMISSION.SUPER_USER) {
-            } else {
-              this.router.navigate(['']);
-            }
-          }
-        });
-      } else {
-        this.router.navigate(['']);
-      }
-    });
+    // onAuthStateChanged(this.auth, (user) => {
+    //   this.user = user;
+    //   if (user) {
+    //     const userRef = ref(
+    //       this.db,
+    //       'new_online_attendance2022/users/' + user.uid
+    //     );
+    //     get(userRef).then((v) => {
+    //       if (v.exists()) {
+    //         if (v.val()['permission'] == PERMISSION.SUPER_USER) {
+    //         } else {
+    //           this.router.navigate(['']);
+    //         }
+    //       }
+    //     });
+    //   } else {
+    //     this.router.navigate(['']);
+    //   }
+    // });
 
     const clusterRef = ref(this.db, 'move_follow_up_2023/clusters');
     onValue(clusterRef, (snapShot) => {
@@ -104,6 +106,14 @@ export class UserManagementPage implements OnInit {
     });
   }
 
+  loadData(): void {
+    if (this.user.permission == PERMISSION.SUPER_USER) {
+      console.log('Super User.');
+    } else {
+      this.router.navigate(['']);
+    }
+  }
+
   ngOnInit() {
     this.title.setTitle('User Management Console');
     const userRef = ref(this.db, 'new_online_attendance2022/users');
@@ -112,15 +122,6 @@ export class UserManagementPage implements OnInit {
         this.arrUser = Object.values(v.val());
       }
     });
-  }
-
-  logout() {
-    signOut(this.auth)
-      .then(() => {
-        console.log('Signed out.');
-        window.location.reload();
-      })
-      .catch((err) => {});
   }
 
   async editPastoralTeam(user: any) {
@@ -171,6 +172,22 @@ export class UserManagementPage implements OnInit {
     }
     modal.dismiss();
     this.title.setTitle('User Management Console');
+  }
+
+  delAssignedCG(user: any, cg: any) {
+    // console.log(cg);
+    const dataRef = ref(
+      this.db,
+      'new_online_attendance2022/users/' + user.id + '/assigned_cg/' + cg.key
+    );
+    remove(dataRef)
+      .then(() => {
+        // presentToast("D")
+      })
+      .catch((e) => {
+        presentToast('Error!', this.toastController, 1000);
+        console.log(e);
+      });
   }
 
   changeUserLevel(user: any) {
