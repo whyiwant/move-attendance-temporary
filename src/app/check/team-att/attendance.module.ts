@@ -8,6 +8,7 @@ import { AttendancePageRoutingModule } from './attendance-routing.module';
 
 import { AttendancePage } from './attendance.page';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     IonicModule,
     AttendancePageRoutingModule,
     NgxChartsModule,
+    NavBarComponent,
   ],
   declarations: [AttendancePage],
 })

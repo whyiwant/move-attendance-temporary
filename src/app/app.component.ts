@@ -87,6 +87,16 @@ export class AppComponent {
             this.user.permission &&
             this.user.permission == PERMISSION.SUPER_USER,
         },
+        {
+          title: 'Manage User',
+          url: '/user-management',
+          icon: 'people',
+          // canAccess: this.user.permission == PERMISSION.SUPER_USER,
+          canAccess:
+            this.user.permission &&
+            this.user.permission == PERMISSION.SUPER_USER,
+          category: 'pastoral',
+        },
       ];
       console.log(this.appPages);
     } else {

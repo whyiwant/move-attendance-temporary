@@ -11,6 +11,7 @@ import { EditPastoralTeamComponent } from './edit-pastoral-team/edit-pastoral-te
 import { EditNameComponent } from './edit-name/edit-name.component';
 import { EditAssignedCGComponent } from './edit-assigned-cg/edit-assigned-cg.component';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { NavBarComponent } from '../../components/nav-bar/nav-bar.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { IonicSelectableModule } from 'ionic-selectable';
     IonicModule,
     UserManagementPageRoutingModule,
     IonicSelectableModule,
+    NavBarComponent,
   ],
   declarations: [
     UserManagementPage,

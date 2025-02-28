@@ -12,6 +12,7 @@ import {
   query,
   ref,
 } from 'firebase/database';
+import { BasePage } from 'src/interface/BasePage';
 
 class IAtt {
   // total: number = 0
@@ -51,8 +52,8 @@ class Att {
   templateUrl: './attendance.page.html',
   styleUrls: ['./attendance.page.scss'],
 })
-export class AttendancePage implements OnInit {
-  db: Database;
+export class AttendancePage extends BasePage implements OnInit {
+  // db: Database;
   ref: any;
 
   arrCG = [];
@@ -65,33 +66,34 @@ export class AttendancePage implements OnInit {
   attCG: Att = new Att();
   attService: Att = new Att();
 
-  auth!: Auth;
-  name: string | null = '';
+  // auth!: Auth;
+  // name: string | null = '';
 
   constructor(
     private title: Title,
     private location: Location,
     private route: ActivatedRoute,
-    private router: Router
+    router: Router
   ) {
-    this.auth = getAuth();
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        const uid = user.uid;
-        console.log(user.displayName);
-        console.log(user.phoneNumber);
-        if (user.displayName) {
-          this.name = user.displayName;
-        } else {
-          this.name = user.phoneNumber;
-        }
-      } else {
-        console.log('No user.');
-        router.navigate(['']);
-      }
-    });
+    super(router, true);
+    // this.auth = getAuth();
+    // onAuthStateChanged(this.auth, (user) => {
+    //   if (user) {
+    //     const uid = user.uid;
+    //     console.log(user.displayName);
+    //     console.log(user.phoneNumber);
+    //     if (user.displayName) {
+    //       this.name = user.displayName;
+    //     } else {
+    //       this.name = user.phoneNumber;
+    //     }
+    //   } else {
+    //     console.log('No user.');
+    //     router.navigate(['']);
+    //   }
+    // });
 
-    this.db = getDatabase();
+    // this.db = getDatabase();
 
     onValue(ref(this.db, 'new_online_attendance2022/titles'), (ss) => {
       this.arrTitle = Object.values(ss.val());
@@ -109,6 +111,8 @@ export class AttendancePage implements OnInit {
       });
     });
   }
+
+  loadData(): void {}
 
   ngOnInit() {}
 

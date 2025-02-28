@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="name">
       <ion-menu-button></ion-menu-button>
@@ -27,7 +27,12 @@
       </ion-button>
     </ion-item>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
+<app-nav-bar
+  title="Submit Attendance"
+  [user]="user"
+  [auth]="auth"
+></app-nav-bar>
 
 <ion-content [fullscreen]="true">
   <ion-item class="select-CG">
@@ -757,7 +762,7 @@
         <ion-card (click)="copyAtt(att)">
           <!-- <ion-card-title></ion-card-title> -->
           <ion-card-content>
-            <ion-text>{{att.CG}}@{{att.title}}</ion-text><br /><br />
+            <ion-text>{{att.CG}}{{'@'}}{{att.title}}</ion-text><br /><br />
             <!-- <b>In Time - Friday session</b><br> -->
             <b>{{arrTitleForTitles[att.title].cgTitle}} </b><br />
             {{ "Total - " + att.attCG.Total }}<br />

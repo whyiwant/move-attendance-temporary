@@ -9,6 +9,7 @@ import { IonicSelectableModule } from 'ionic-selectable';
 import { NamesPipePipe } from '../names-pipe.pipe';
 import { ConfirmAttComponent } from '../popover/confirm-att/confirm-att.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NavBarComponent } from '../components/nav-bar/nav-bar.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
     HomePageRoutingModule,
     IonicSelectableModule,
     HttpClientModule,
+    NavBarComponent,
   ],
   declarations: [HomePage, NamesPipePipe, ConfirmAttComponent],
 })

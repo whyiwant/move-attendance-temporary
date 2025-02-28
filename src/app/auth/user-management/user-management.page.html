@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="user">
       <ion-menu-button></ion-menu-button>
@@ -31,7 +31,12 @@
       </ion-button>
     </ion-item>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
+<app-nav-bar
+  title="User Management Console"
+  [auth]="auth"
+  [user]="user"
+></app-nav-bar>
 
 <ion-content>
   <div class="scroll-div">

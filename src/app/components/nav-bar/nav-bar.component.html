@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="user">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-no-padding" *ngIf="user"> {{ title }} </ion-title>
+    <ion-title *ngIf="!user"> {{ title }} </ion-title>
+    <ion-button
+      slot="end"
+      class="btnLogin"
+      style="padding-right: 10px"
+      routerLink="/login"
+      *ngIf="!user"
+    >
+      <ion-icon name="person-outline" style="padding-right: 5px"></ion-icon>
+      Login
+    </ion-button>
+    <ion-item *ngIf="user" slot="end" lines="none" class="username">
+      <ion-label style="font-size: xx-small" *ngIf="user && user.name">
+        {{ user.name }}
+      </ion-label>
+      <ion-label style="font-size: xx-small" *ngIf="user && !user.name">
+        {{ user.phoneNum }}
+      </ion-label>
+      <ion-button
+        fill="outline"
+        style="height: 25px"
+        (click)="logout()"
+        *ngIf="user"
+      >
+        <ion-icon name="exit"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
